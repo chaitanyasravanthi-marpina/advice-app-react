@@ -1,35 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-class App extends React.Component{
-    state = {advise: ''};
-    componentDidMount(){
-        this.fetchAdvice();
-        
-    }
-    fetchAdvice = () => {
-        axios.get('https://api.adviceslip.com/advice')
-        .then((response) => {
-            const { advice } = response.data.slip;
-            this.setState({ advice });
-            
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-    }
-    render(){
-        const {advice} = this.state;
-        return(
-            
-                <div className="app">
-                    <div className = "card">
-                        <h1 className = "heading">{advice}</h1>
-                        <button className = "button" onClick = {this.fetchAdvice}> <span>GIVE ME ADVISE</span> </button>
-                    </div>
-                </div>
-            
-        )
-    }
+
+function App() {
+  const [advice, setAdvice] = useState('');
+
+  // Equivalent to componentDidMount
+  useEffect(() => {
+    fetchAdvice();
+  }, []);
+
+  const fetchAdvice = () => {
+    axios.get('https://api.adviceslip.com/advice')
+      .then((response) => {
+        const { advice } = response.data.slip;
+        setAdvice(advice);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  return (
+    <div className="app">
+      <div className="card">
+        <h1 className="heading">{advice}</h1>
+        <button className="button" onClick={fetchAdvice}>
+          <span>GIVE ME ADVISE</span>
+        </button>
+      </div>
+    </div>
+  );
 }
-export default App
+
+export default App;
